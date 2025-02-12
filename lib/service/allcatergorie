@@ -1,0 +1,23 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class AllCategories {
+  Future<List<dynamic>> getAllCategories() async {
+    List<dynamic> items = [];  // Use dynamic since response may vary
+
+    try {
+      var url = Uri.parse('https://fakestoreapi.com/products/categories');
+      var response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        items = jsonDecode(response.body); // Assign JSON response to items
+      } else {
+        throw Exception('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching categories: $e');
+    }
+
+    return items;
+  }
+}
