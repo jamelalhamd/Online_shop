@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shopping/modal/itemmodal.dart';
+import 'package:shopping/service/allitems.dart';
+import 'package:shopping/wediget/shopingcart.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -23,51 +26,32 @@ class _HomepageState extends State<Homepage> {
         elevation: 0.5,
         centerTitle: true,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          // Subtle grey background color
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2), // Shadow with opacity
-              offset: Offset(0, 4), // Vertical offset
-              blurRadius: 50, // Blur radius for soft shadow
-              spreadRadius: 0, // No spread, just the blur
-            ),
-          ],
-        ),
-        height: 130,
-        width: 230,
-        child: Card(
-          color: Colors.white, // Card background color
-          elevation: 10, // Shadow effect from the Card itself
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12), // Rounded corners for card
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment:
-                  CrossAxisAlignment.start, // Align content to the left
-              children: [
-                Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
-                Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween, // Adjust icon alignment
-                  children: [
-                    Text('Details'),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(FontAwesomeIcons
-                          .heart), // Heart icon from FontAwesome
-                      color: Colors.red, // Icon color (red)
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+      body: FutureBuilder<List<Producktmodal>>(
+        future: Allitems().getallitems(),
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasData) {
+            return GridView.builder(
+              padding: EdgeInsets.only(top: 80, left: 10, right: 10),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                // Max width of each grid item in pixels
+                childAspectRatio: 1.7,
+                crossAxisCount:
+                    2, // Aspect ratio for the grid item, e.g., square
+                crossAxisSpacing: 15, // Horizontal spacing between items
+                mainAxisSpacing: 100, // Vertical spacing between items
+              ),
+              itemBuilder: (context, index) =>
+                  ShopingCart(), // Your custom widget for each grid item
+              itemCount:
+                  20, // Number of items in the grid (you can change this as needed)
+            );
+          } else {
+            return Center(
+                child: CircularProgressIndicator.adaptive(
+              backgroundColor: Colors.green,
+            ));
+          }
+        },
       ),
     );
   }

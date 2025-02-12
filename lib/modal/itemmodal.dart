@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class Producktmodal {
   final int id;
   final String title;
@@ -27,6 +28,13 @@ class Producktmodal {
       image: source['image'],
       rating: Rating.fromJson(source['rating']),
     );
+  }
+
+  Object? get length => null;
+
+  @override
+  String toString() {
+    return 'Producktmodal(id: $id, title: $title, price: $price, description: $description, category: $category, image: $image, rating: $rating)';
   }
 }
 
