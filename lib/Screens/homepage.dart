@@ -30,6 +30,8 @@ class _HomepageState extends State<Homepage> {
         future: Allitems().getallitems(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
+            List<Producktmodal>? products = snapshot.data;
+
             return GridView.builder(
               padding: EdgeInsets.only(top: 80, left: 10, right: 10),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -40,10 +42,11 @@ class _HomepageState extends State<Homepage> {
                 crossAxisSpacing: 15, // Horizontal spacing between items
                 mainAxisSpacing: 100, // Vertical spacing between items
               ),
-              itemBuilder: (context, index) =>
-                  ShopingCart(), // Your custom widget for each grid item
-              itemCount:
-                  20, // Number of items in the grid (you can change this as needed)
+              itemBuilder: (context, index) => ShopingCart(
+                producktmodal: products![index],
+              ), // Your custom widget for each grid item
+              itemCount: products
+                  ?.length, // Number of items in the grid (you can change this as needed)
             );
           } else {
             return Center(
