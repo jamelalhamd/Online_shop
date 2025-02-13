@@ -18,7 +18,13 @@ class _ShopingCartState extends State<ShopingCart> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, Updatepage.id);
+        Navigator.pushNamed(
+          context,
+          UpdatePage.id,
+          arguments: {
+            'producktmodal': widget.producktmodal, // Pass as a Map
+          },
+        );
       },
       child: Stack(
         clipBehavior: Clip.none,

@@ -22,7 +22,9 @@ class Producktmodal {
     return Producktmodal.ProductModal(
       id: source['id'],
       title: source['title'],
-      price: source['price'], // Ensure price is cast to double
+      price: source['price'] is int
+          ? (source['price'] as int).toDouble()
+          : double.tryParse(source['price'].toString()) ?? 0.0, // ✅ الحل هنا
       description: source['description'],
       category: source['category'],
       image: source['image'],
@@ -46,8 +48,12 @@ class Rating {
 
   factory Rating.fromJson(source) {
     return Rating(
-      rating: source['rate'], // Ensure rating is double
-      count: source['count'], // Ensure count is int
+      rating: source != null && source['rate'] != null
+          ? source['rate'].toDouble() // ✅ نحولها إلى double بأمان
+          : 0.0, // ✅ قيمة افتراضية عند غياب `rate`
+      count: source != null && source['count'] != null
+          ? source['count']
+          : 0, // ✅ قيمة افتراضية عند غياب `count`
     );
   }
 }

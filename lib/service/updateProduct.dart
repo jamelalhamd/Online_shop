@@ -1,54 +1,61 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopping/modal/itemmodal.dart';
 
-class AddProduct {
-  Future<Producktmodal> addProduct({
-    required String id,
-    required String title,
-    required String price,
-    required String description,
-    required String category,
-    required String image,
-    @required String? token,
-  }) async {
-    var url = Uri.parse('https://fakestoreapi.com/products/${id}');
+Future<Producktmodal> updateProduct({
+  required int id,
+  required String title,
+  required double price,
+  required String description,
+  required String category,
+  required String image,
+  String? token, // التحقق من الـ token
+}) async {
+  var url = Uri.parse('https://fakestoreapi.com/products/$id');
 
-    Map<String, String> header = {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    };
-    if (token != null) {
-      header.addAll({'Authorization': 'Bearer $token'});
+  // التحقق من الحقول قبل الإرسال
+  if (title.isEmpty ||
+      description.isEmpty ||
+      category.isEmpty ||
+      image.isEmpty) {
+    throw Exception('Required fields cannot be empty');
+  }
+
+  Map<String, String> header = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  };
+
+  // إذا كان الـ token موجودًا، أضفه إلى الـ header
+  if (token != null && token.isNotEmpty) {
+    header.addAll({'Authorization': 'Bearer $token'});
+  }
+
+  Map<String, String> body = {
+    'id': id.toString(),
+    'title': title,
+    'price': price.toString(), // تأكد من أن السعر هو String
+    'description': description,
+    'category': category,
+    'image': image,
+  };
+
+  try {
+    var response = await http.put(
+      url,
+      body: body, // تأكد من أن الجسم مشفر بشكل صحيح
+      headers: header,
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return Producktmodal.fromJson(data);
+    } else {
+      throw Exception('Request failed with status: ${response.statusCode}');
     }
-
-    Map<String, String> body = {
-      'title': title,
-      'price': price,
-      'description': description,
-      'category': category,
-      'image': image,
-    };
-
-    try {
-      // Sending POST request with JSON body
-      var response = await http.put(
-        url,
-        body: jsonEncode(body), // Ensure body is properly encoded
-        headers: header,
-      );
-
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        return Producktmodal.fromJson(data);
-      } else {
-        // Throw an exception for non-200 status code
-        throw Exception('Request failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      // Log the error and rethrow
-      print('Request failed: ${e.toString()}');
-      throw Exception('Request failed: ${e.toString()}');
-    }
+  } catch (e) {
+    print('Request failed: ${e.toString()}');
+    throw Exception('Request failed: ${e.toString()}');
   }
 }

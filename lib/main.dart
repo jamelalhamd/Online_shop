@@ -9,7 +9,7 @@ void main() {
     debugShowCheckedModeBanner: false,
     home: Homepage(),
     routes: {
-      Updatepage.id: (context) => Updatepage(),
+      UpdatePage.id: (context) => UpdatePage(),
       Homepage.id: (context) => Homepage(),
       Login.id: (context) => Login(),
       Details.id: (context) => Details(),
