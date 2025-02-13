@@ -15,14 +15,6 @@ Future<Producktmodal> updateProduct({
 }) async {
   var url = Uri.parse('https://fakestoreapi.com/products/$id');
 
-  // التحقق من الحقول قبل الإرسال
-  if (title.isEmpty ||
-      description.isEmpty ||
-      category.isEmpty ||
-      image.isEmpty) {
-    throw Exception('Required fields cannot be empty');
-  }
-
   Map<String, String> header = {
     'Content-Type': 'application/x-www-form-urlencoded'
   };

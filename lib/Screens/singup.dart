@@ -1,31 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:shopping/Screens/homepage.dart';
-import 'package:shopping/Screens/singup.dart';
 import 'package:shopping/firbase/Createuser.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-  static const String id = 'login';
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
+  static const String id = "signup";
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
   bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
   bool _isLoading = false;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
+
     super.dispose();
   }
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleSignUp() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -41,41 +45,34 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       // Show success message
-      try {
-        await SinuploginUser(
-          email: _emailController.text,
-          password: _passwordController.text,
-          isLogin: true,
-        );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Sign up Successful!'),
+          backgroundColor: Colors.green,
+        ),
+      );
 
-        Navigator.pushNamed(
-          context,
-          Homepage.id, // Use the id defined in the Homepage widget
-          arguments: {
-            'email': _emailController.text
-          }, // Passing email as argument
-        );
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login Successful!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      } on Exception catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Login Failed! ${e.toString()}'),
-            backgroundColor: const Color.fromARGB(255, 204, 43, 22),
-          ),
-        );
-      }
+      // Passing actual email and password
+      await SinuploginUser(
+        email: _emailController.text,
+        password: _passwordController.text,
+        isLogin: false,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Registration'),
+        centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back)),
+      ),
       backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: Center(
@@ -88,13 +85,13 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Icon(
-                    Icons.lock_outline,
+                    Icons.account_circle,
                     size: 100,
                     color: Colors.blue,
                   ),
                   const SizedBox(height: 32),
                   const Text(
-                    'Welcome Back',
+                    'Create Account',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -103,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Sign in to continue',
+                    'Sign up to get started',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -112,12 +109,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 32),
                   Card(
-                    color: const Color.fromARGB(255, 245, 244, 244),
                     elevation: 2,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
+                          const SizedBox(height: 16),
                           TextFormField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -170,13 +167,46 @@ class _LoginPageState extends State<LoginPage> {
                               return null;
                             },
                           ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _confirmPasswordController,
+                            obscureText: !_isConfirmPasswordVisible,
+                            decoration: InputDecoration(
+                              labelText: 'Confirm Password',
+                              hintText: 'Confirm your password',
+                              prefixIcon: const Icon(Icons.lock),
+                              border: const OutlineInputBorder(),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isConfirmPasswordVisible
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isConfirmPasswordVisible =
+                                        !_isConfirmPasswordVisible;
+                                  });
+                                },
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please confirm your password';
+                              }
+                              if (value != _passwordController.text) {
+                                return 'Passwords do not match';
+                              }
+                              return null;
+                            },
+                          ),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
                   FilledButton(
-                    onPressed: _isLoading ? null : _handleLogin,
+                    onPressed: _isLoading ? null : _handleSignUp,
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
@@ -190,33 +220,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           )
                         : const Text(
-                            'Login',
+                            'Sign Up',
                             style: TextStyle(fontSize: 16),
                           ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Text('have you account?'),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            SignUpPage
-                                .id, // Use the id defined in the Homepage widget
-                            arguments: {
-                              'email': _emailController.text
-                            }, // Passing email as argument
-                          );
-                        },
-                        child: Text(
-                          'Registeration',
-                          style: TextStyle(
-                            color: const Color.fromARGB(255, 35, 12, 167),
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),

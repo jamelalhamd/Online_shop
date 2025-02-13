@@ -76,19 +76,19 @@ class _UpdatePageState extends State<UpdatePage> {
         if (parsedPrice == null) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-                content: Text('الرجاء إدخال سعر صالح!'),
+                content: Text('Please enter a valid price!'),
                 backgroundColor: Colors.red),
           );
           return;
         }
         await updateProduct(
-            id: producktmodal.id,
-            category: producktmodal.category,
-            title: _title.text,
-            price: parsedPrice, // Convert the price back to String
-            description: _details.text,
-            image: _image.text,
-            token: 'bvcxfgfvgh');
+          id: producktmodal.id,
+          category: producktmodal.category,
+          title: _title.text,
+          price: parsedPrice, // Convert the price back to String
+          description: _details.text,
+          image: _image.text,
+        );
       } on Exception catch (e) {
         throw Exception(e.toString());
       }
