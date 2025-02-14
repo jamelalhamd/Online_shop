@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping/Screens/homepage.dart';
 import 'package:shopping/Screens/singup.dart';
-import 'package:shopping/firbase/Createuser.dart';
+import 'package:shopping/firbase/sinuploginUser.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -31,42 +32,62 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = true;
       });
 
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 2));
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      if (!mounted) return;
-
-      // Show success message
       try {
-        await SinuploginUser(
+        final userCredential = await SinuploginUser(
           email: _emailController.text,
           password: _passwordController.text,
           isLogin: true,
         );
 
-        Navigator.pushNamed(
-          context,
-          Homepage.id, // Use the id defined in the Homepage widget
-          arguments: {
-            'email': _emailController.text
-          }, // Passing email as argument
-        );
+        setState(() {
+          _isLoading = false;
+        });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login Successful!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      } on Exception catch (e) {
+        if (userCredential != null) {
+          // Authentication successful, navigate to home
+          if (!mounted) return;
+          Navigator.pushNamed(
+            context,
+            Homepage.id,
+            arguments: {'email': _emailController.text},
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login Successful!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else {
+          // Authentication failed, show error message
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content:
+                  Text('Login Failed! Please check your Email oder Password.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        String errorMessage = 'Login Failed! ';
+        if (e.code == 'user-not-found') {
+          errorMessage += 'No user found with this email.';
+        } else if (e.code == 'wrong-password') {
+          errorMessage += 'Incorrect password.';
+        } else {
+          errorMessage += e.message ?? 'An error occurred.';
+        }
+
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Login Failed! ${e.toString()}'),
-            backgroundColor: const Color.fromARGB(255, 204, 43, 22),
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
           ),
         );
       }

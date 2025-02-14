@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shopping/Screens/Addproduck.dart';
+import 'package:shopping/Screens/login.dart';
+import 'package:shopping/firbase/signout.dart';
+
 import 'package:shopping/modal/itemmodal.dart';
 import 'package:shopping/service/allitems.dart';
+import 'package:shopping/wediget/drawer.dart';
+
 import 'package:shopping/wediget/shopingcart.dart';
 
 class Homepage extends StatefulWidget {
@@ -14,7 +20,29 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map?;
+    String email = arguments?['email'] ?? 'Gust';
     return Scaffold(
+      drawer: Reusabledrawer(
+        accountName: '',
+        accountEmail: email,
+        profileImage:
+            'https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_.jpg', // or use local asset
+
+        onLogout: () {
+          Navigator.pushNamed(context, LoginPage.id);
+        },
+        drawerItems: [
+          DrawerItem(
+              icon: Icons.add,
+              text: 'add Produkt',
+              onTap: () {
+                Navigator.pushNamed(context, Addproduck.id);
+                signOutUser();
+              },
+              title: 'profile')
+        ],
+      ),
       appBar: AppBar(
         actions: [
           Padding(

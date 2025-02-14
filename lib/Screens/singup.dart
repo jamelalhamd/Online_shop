@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopping/firbase/Createuser.dart';
+import 'package:shopping/Screens/login.dart';
+import 'package:shopping/firbase/sinuploginUser.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -45,19 +46,29 @@ class _SignUpPageState extends State<SignUpPage> {
       if (!mounted) return;
 
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sign up Successful!'),
-          backgroundColor: Colors.green,
-        ),
-      );
 
       // Passing actual email and password
-      await SinuploginUser(
-        email: _emailController.text,
-        password: _passwordController.text,
-        isLogin: false,
-      );
+      try {
+        await SinuploginUser(
+          email: _emailController.text,
+          password: _passwordController.text,
+          isLogin: false,
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Sign up failed !'),
+          backgroundColor: Color.fromARGB(255, 211, 15, 15),
+        ));
+
+        Navigator.pushNamed(context, LoginPage.id);
+      } on Exception catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Sign up failed !'),
+            backgroundColor: Color.fromARGB(255, 211, 15, 15),
+          ),
+        );
+      }
     }
   }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "430524128666",
+    "project_id": "supernarkt",
+    "storage_bucket": "supernarkt.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430524128666:android:672f2f4cad9588eef62e23",
+        "android_client_info": {
+          "package_name": "com.example.shopping"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT9EZctTDvNAI8fthsN_k8Tej-g67t5GI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
