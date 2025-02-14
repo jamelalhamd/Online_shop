@@ -24,7 +24,8 @@ class Reusabledrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: Text(accountName,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            accountEmail: Text(accountEmail),
+            accountEmail: Text(accountEmail,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(profileImage),
             ),
@@ -41,6 +42,7 @@ class Reusabledrawer extends StatelessWidget {
               padding: EdgeInsets.zero,
               children: drawerItems.map((item) {
                 return _buildDrawerItem(
+                  icon_end: item.icon_end,
                   icon: item.icon,
                   text: item.text,
                   onTap: item.onTap,
@@ -64,11 +66,13 @@ class Reusabledrawer extends StatelessWidget {
 
   Widget _buildDrawerItem(
       {required IconData icon,
+      IconData? icon_end,
       required String text,
       required VoidCallback onTap}) {
     return ListTile(
+      trailing: Icon(icon_end, color: Colors.blueAccent),
       leading: Icon(icon, color: Colors.blueAccent),
-      title: Text(text, style: TextStyle(fontSize: 16)),
+      title: Text(text, style: TextStyle(fontSize: 18)),
       onTap: onTap,
     );
   }
@@ -76,10 +80,12 @@ class Reusabledrawer extends StatelessWidget {
 
 class DrawerItem {
   final IconData icon;
+  final IconData? icon_end;
   final String text;
   final VoidCallback onTap;
 
   DrawerItem({
+    this.icon_end,
     required this.icon,
     required this.text,
     required this.onTap,

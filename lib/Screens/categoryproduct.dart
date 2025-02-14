@@ -2,58 +2,78 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopping/ReusableBottomSheet.dart';
 import 'package:shopping/Screens/Addproduck.dart';
+import 'package:shopping/Screens/homepage.dart';
 import 'package:shopping/Screens/login.dart';
 import 'package:shopping/firbase/signout.dart';
 import 'package:shopping/modal/itemmodal.dart';
-import 'package:shopping/service/allcatergorie';
-
 import 'package:shopping/service/allitems.dart';
-import 'package:shopping/service/getcategorieproduckt.dart';
 import 'package:shopping/wediget/drawer.dart';
 import 'package:shopping/wediget/shopingcart.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
-  static const String id = 'homepage';
+class CategoryProduct extends StatefulWidget {
+  const CategoryProduct({super.key});
+  static const String id = 'categoryproduct';
 
   @override
-  State<Homepage> createState() => _HomepageState();
+  State<CategoryProduct> createState() => _CategoryProductState();
 }
 
-class _HomepageState extends State<Homepage> {
-  String? _catergory = ''; // Initialize _catergory to an empty string
-  bool _allproduct = true;
+class _CategoryProductState extends State<CategoryProduct> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  final _categoryController = TextEditingController();
+
   bool _isLoading = false;
 
   @override
   void dispose() {
     _emailController.dispose();
+
     super.dispose();
   }
 
   Future<void> _addcatergory() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _allproduct = false;
+        _isLoading = true;
       });
-      Navigator.pop(context);
+
+      try {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Product title   has been added successfully!'),
+            backgroundColor: const Color.fromARGB(255, 119, 148, 120),
+          ),
+        );
+
+        Navigator.pushNamed(context, Homepage.id);
+      } on Exception catch (e) {
+        throw Exception(e.toString());
+      }
+
+      if (!mounted) return;
+
+      // Show success message
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      // Navigate back after success
+      // Navigator.pop(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map?;
-    String email = arguments?['email'] ?? 'Guest';
-
+    String email = arguments?['email'] ?? 'Gust';
     return Scaffold(
       drawer: Reusabledrawer(
         accountName: '',
         accountEmail: email,
         profileImage:
-            'https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_.jpg',
+            'https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_.jpg', // or use local asset
+
         onLogout: () async {
           await signOutUser();
           Navigator.pushNamed(context, LoginPage.id);
@@ -62,19 +82,16 @@ class _HomepageState extends State<Homepage> {
           DrawerItem(
               icon_end: Icons.production_quantity_limits,
               icon: Icons.add,
-              text: 'Add Product',
+              text: 'add Produkt',
               onTap: () {
                 Navigator.pushNamed(context, Addproduck.id);
               },
-              title: 'Add Product'),
+              title: 'add Produkt'),
           DrawerItem(
               icon_end: Icons.category,
               icon: Icons.add,
-              text: 'Add Category',
+              text: 'add Category',
               onTap: () {
-                setState(() {
-                  _allproduct = false;
-                });
                 ReusableBottomSheet.show(context, [
                   SafeArea(
                     child: Center(
@@ -88,7 +105,7 @@ class _HomepageState extends State<Homepage> {
                             children: [
                               const SizedBox(height: 12),
                               const Text(
-                                'Select Category',
+                                'Add New Cateegory',
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -103,50 +120,23 @@ class _HomepageState extends State<Homepage> {
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
                                     children: [
-                                      FutureBuilder<List<dynamic>>(
-                                        future:
-                                            AllCategories().getAllCategories(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            List<String> items =
-                                                snapshot.data!.cast<String>();
-                                            return DropdownButtonFormField<
-                                                String>(
-                                              value: _catergory!.isEmpty
-                                                  ? null
-                                                  : _catergory, // Handle null gracefully
-                                              decoration: const InputDecoration(
-                                                labelText: 'Category',
-                                                prefixIcon:
-                                                    Icon(Icons.category),
-                                                border: OutlineInputBorder(),
-                                              ),
-                                              onChanged: (String? value) {
-                                                setState(() {
-                                                  _catergory = value ??
-                                                      ''; // Ensure _catergory isn't null
-                                                });
-                                              },
-                                              items: items.map<
-                                                      DropdownMenuItem<String>>(
-                                                  (String value) {
-                                                return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Text(value),
-                                                );
-                                              }).toList(),
-                                              validator: (value) {
-                                                if (value == null ||
-                                                    value.isEmpty) {
-                                                  return 'Please select a category';
-                                                }
-                                                return null;
-                                              },
-                                            );
-                                          } else {
-                                            return const Text(
-                                                'Loading categories...');
+                                      TextFormField(
+                                        controller: _emailController,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Catergory',
+                                          hintText: 'Enter The New Category',
+                                          prefixIcon:
+                                              Icon(Icons.category_outlined),
+                                          border: OutlineInputBorder(),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter  the category';
                                           }
+
+                                          return null;
                                         },
                                       ),
                                     ],
@@ -155,16 +145,7 @@ class _HomepageState extends State<Homepage> {
                               ),
                               const SizedBox(height: 24),
                               FilledButton(
-                                onPressed: () {
-                                  if (_catergory != null &&
-                                      _catergory!.isNotEmpty) {
-                                    setState(() {
-                                      _allproduct = false;
-                                    });
-                                    Navigator.pop(
-                                        context); // Close bottom sheet
-                                  }
-                                },
+                                onPressed: _isLoading ? null : _addcatergory,
                                 style: FilledButton.styleFrom(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16),
@@ -179,7 +160,7 @@ class _HomepageState extends State<Homepage> {
                                         ),
                                       )
                                     : const Text(
-                                        'Show all products for Category',
+                                        'Add Category',
                                         style: TextStyle(fontSize: 16),
                                       ),
                               ),
@@ -192,48 +173,47 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ]);
               },
-              title: 'Add Category'),
+              title: 'add Category'),
         ],
       ),
       appBar: AppBar(
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: IconButton(
-                onPressed: () {}, icon: Icon(FontAwesomeIcons.cartPlus)),
-          ),
+              padding: EdgeInsets.only(right: 16),
+              child: IconButton(
+                  onPressed: () {}, icon: Icon(FontAwesomeIcons.cartPlus)))
         ],
-        title: const Text('Homepage'),
+        title: Text('homepage'),
         elevation: 0.5,
         centerTitle: true,
       ),
       body: FutureBuilder<List<Producktmodal>>(
-        future: _allproduct
-            ? Allitems().getallitems()
-            : Allcategoreitemes().getcategoryitems(Catergory: _catergory!),
+        future: Allitems().getallitems(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             List<Producktmodal>? products = snapshot.data;
 
             return GridView.builder(
-              padding: const EdgeInsets.only(top: 80, left: 10, right: 10),
+              padding: EdgeInsets.only(top: 80, left: 10, right: 10),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                // Max width of each grid item in pixels
                 childAspectRatio: 1.7,
-                crossAxisCount: 2,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 100,
+                crossAxisCount:
+                    2, // Aspect ratio for the grid item, e.g., square
+                crossAxisSpacing: 15, // Horizontal spacing between items
+                mainAxisSpacing: 100, // Vertical spacing between items
               ),
               itemBuilder: (context, index) => ShopingCart(
                 producktmodal: products![index],
-              ),
-              itemCount: products?.length,
+              ), // Your custom widget for each grid item
+              itemCount: products
+                  ?.length, // Number of items in the grid (you can change this as needed)
             );
           } else {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(
-                backgroundColor: Colors.green,
-              ),
-            );
+            return Center(
+                child: CircularProgressIndicator.adaptive(
+              backgroundColor: Colors.green,
+            ));
           }
         },
       ),
