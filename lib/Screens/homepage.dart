@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopping/ReusableBottomSheet.dart';
 import 'package:shopping/Screens/Addproduck.dart';
+import 'package:shopping/Screens/bill.dart';
+import 'package:shopping/Screens/kaufen.dart';
 import 'package:shopping/Screens/login.dart';
+import 'package:shopping/constant/constant.dart';
 import 'package:shopping/firbase/signout.dart';
 import 'package:shopping/modal/itemmodal.dart';
 import 'package:shopping/service/allcatergorie';
@@ -21,6 +24,13 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  void initState() {
+    super.initState();
+
+    // Reset the favoriteItems list when the homepage is opened
+    favoriteItems.clear();
+  }
+
   String? _catergory = ''; // Initialize _catergory to an empty string
   bool _allproduct = true;
   final _formKey = GlobalKey<FormState>();
@@ -212,7 +222,10 @@ class _HomepageState extends State<Homepage> {
           Padding(
             padding: EdgeInsets.only(right: 16),
             child: IconButton(
-                onPressed: () {}, icon: Icon(FontAwesomeIcons.cartPlus)),
+                onPressed: () {
+                  Navigator.pushNamed(context, Kaufen.id);
+                },
+                icon: Icon(FontAwesomeIcons.cartPlus)),
           ),
         ],
         title: const Text('Homepage'),

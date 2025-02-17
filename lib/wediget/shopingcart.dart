@@ -1,22 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopping/Screens/updatepage.dart';
+import 'package:shopping/constant/constant.dart';
 import 'package:shopping/modal/itemmodal.dart';
 
 class ShopingCart extends StatefulWidget {
-  const ShopingCart({
+  ShopingCart({
     super.key,
     required this.producktmodal,
+    this.isfavoirt = false,
   });
+
   final Producktmodal producktmodal;
+  final bool? isfavoirt;
 
   @override
   State<ShopingCart> createState() => _ShopingCartState();
 }
 
 class _ShopingCartState extends State<ShopingCart> {
-  bool isFavorite = false;
-  int count = 1;
+  static final Map<int, bool> _favoritesMap = {};
+
+  bool get _checkfavorit {
+    return _favoritesMap[widget.producktmodal.id] ?? false;
+  }
+
+  void _toggleFavorite() {
+    setState(() {
+      // Toggle the favorite status
+      _favoritesMap[widget.producktmodal.id] = !_checkfavorit;
+
+      if (_favoritesMap[widget.producktmodal.id]!) {
+        favoriteItems.add(widget.producktmodal);
+      } else {
+        favoriteItems.removeWhere((item) => item.id == widget.producktmodal.id);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,54 +55,43 @@ class _ShopingCartState extends State<ShopingCart> {
         children: [
           Container(
             decoration: BoxDecoration(
-              // Subtle grey background color
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2), // Shadow with opacity
-                  offset: Offset(0, 4), // Vertical offset
-                  blurRadius: 50, // Blur radius for soft shadow
-                  spreadRadius: 0, // No spread, just the blur
+                  color: Colors.black.withOpacity(0.2),
+                  offset: Offset(0, 4),
+                  blurRadius: 50,
+                  spreadRadius: 0,
                 ),
               ],
             ),
             height: 230,
             width: 230,
             child: Card(
-              color: Colors.white, // Card background color
-              elevation: 10, // Shadow effect from the Card itself
+              color: Colors.white,
+              elevation: 10,
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(12), // Rounded corners for card
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start, // Align content to the left
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.producktmodal.title.substring(
-                          0, 15), // Fixed: `widget.productmodal.title`
+                      widget.producktmodal.title.substring(0, 15),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .spaceBetween, // Adjust icon alignment
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('${widget.producktmodal.price} \$'),
                         IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isFavorite = !isFavorite;
-                            });
-                          },
-                          icon: Icon(
-                            isFavorite
-                                ? FontAwesomeIcons.solidHeart
-                                : Icons.add,
-                          ),
-                          color: Colors.red, // Icon color (red)
+                          onPressed: _toggleFavorite,
+                          icon: _checkfavorit
+                              ? Icon(FontAwesomeIcons.solidHeart)
+                              : Icon(FontAwesomeIcons.heart),
+                          color: Colors.red,
                         ),
                       ],
                     ),
@@ -95,11 +104,10 @@ class _ShopingCartState extends State<ShopingCart> {
             top: -70,
             left: 80,
             child: Image.network(
-              widget.producktmodal.image, // Fixed: `widget.productmodal.image`
+              widget.producktmodal.image,
               height: 100,
               width: 80,
-              // Set height for the image
-              fit: BoxFit.cover, // Ensure the image scales properly
+              fit: BoxFit.cover,
             ),
           ),
         ],
