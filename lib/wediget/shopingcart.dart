@@ -9,11 +9,15 @@ class ShopingCart extends StatefulWidget {
     required this.producktmodal,
   });
   final Producktmodal producktmodal;
+
   @override
   State<ShopingCart> createState() => _ShopingCartState();
 }
 
 class _ShopingCartState extends State<ShopingCart> {
+  bool isFavorite = false;
+  int count = 1;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -68,9 +72,16 @@ class _ShopingCartState extends State<ShopingCart> {
                       children: [
                         Text('${widget.producktmodal.price} \$'),
                         IconButton(
-                          onPressed: () {},
-                          icon: Icon(FontAwesomeIcons
-                              .heart), // Heart icon from FontAwesome
+                          onPressed: () {
+                            setState(() {
+                              isFavorite = !isFavorite;
+                            });
+                          },
+                          icon: Icon(
+                            isFavorite
+                                ? FontAwesomeIcons.solidHeart
+                                : Icons.add,
+                          ),
                           color: Colors.red, // Icon color (red)
                         ),
                       ],

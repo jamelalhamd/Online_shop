@@ -60,6 +60,16 @@ class _HomepageState extends State<Homepage> {
         },
         drawerItems: [
           DrawerItem(
+              icon: Icons.all_inbox,
+              text: 'ALL Products',
+              onTap: () {
+                setState(() {
+                  _allproduct = true;
+                });
+                Navigator.pop(context);
+              },
+              title: 'Add Product'),
+          DrawerItem(
               icon_end: Icons.production_quantity_limits,
               icon: Icons.add,
               text: 'Add Product',
@@ -69,12 +79,13 @@ class _HomepageState extends State<Homepage> {
               title: 'Add Product'),
           DrawerItem(
               icon_end: Icons.category,
-              icon: Icons.add,
-              text: 'Add Category',
+              icon: Icons.select_all,
+              text: 'Select Category',
               onTap: () {
                 setState(() {
                   _allproduct = false;
                 });
+                Navigator.pop(context);
                 ReusableBottomSheet.show(context, [
                   SafeArea(
                     child: Center(
@@ -161,8 +172,9 @@ class _HomepageState extends State<Homepage> {
                                     setState(() {
                                       _allproduct = false;
                                     });
-                                    Navigator.pop(
-                                        context); // Close bottom sheet
+
+                                    // Close the bottom sheet first
+                                    Navigator.pop(context);
                                   }
                                 },
                                 style: FilledButton.styleFrom(
