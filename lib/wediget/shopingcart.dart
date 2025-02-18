@@ -19,21 +19,25 @@ class ShopingCart extends StatefulWidget {
 }
 
 class _ShopingCartState extends State<ShopingCart> {
-  static final Map<int, bool> _favoritesMap = {};
-
-  bool get _checkfavorit {
-    return _favoritesMap[widget.producktmodal.id] ?? false;
+  bool _checkfavorit(Producktmodal item) {
+    int index = favoriteItems.indexWhere((element) => element.id == item.id);
+    return index != -1;
   }
 
   void _toggleFavorite() {
     setState(() {
-      // Toggle the favorite status
-      _favoritesMap[widget.producktmodal.id] = !_checkfavorit;
+      int index = favoriteItems
+          .indexWhere((element) => element.id == widget.producktmodal.id);
 
-      if (_favoritesMap[widget.producktmodal.id]!) {
+      if (index == -1) {
         favoriteItems.add(widget.producktmodal);
+        favoriteItemscounts.add(1);
       } else {
-        favoriteItems.removeWhere((item) => item.id == widget.producktmodal.id);
+        favoriteItemscounts[index] = favoriteItemscounts[index] == 1 ? 0 : 1;
+        if (favoriteItemscounts[index] == 0) {
+          favoriteItems.removeAt(index);
+          favoriteItemscounts.removeAt(index);
+        }
       }
     });
   }
@@ -88,7 +92,7 @@ class _ShopingCartState extends State<ShopingCart> {
                         Text('${widget.producktmodal.price} \$'),
                         IconButton(
                           onPressed: _toggleFavorite,
-                          icon: _checkfavorit
+                          icon: _checkfavorit(widget.producktmodal)
                               ? Icon(FontAwesomeIcons.solidHeart)
                               : Icon(FontAwesomeIcons.heart),
                           color: Colors.red,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shopping/ReusableBottomSheet.dart';
+import 'package:shopping/wediget/ReusableBottomSheet.dart';
 import 'package:shopping/Screens/Addproduck.dart';
 import 'package:shopping/Screens/bill.dart';
 import 'package:shopping/Screens/kaufen.dart';
@@ -218,6 +218,7 @@ class _HomepageState extends State<Homepage> {
         ],
       ),
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),

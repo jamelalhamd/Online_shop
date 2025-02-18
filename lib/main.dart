@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping/Screens/Addproduck.dart';
+import 'package:shopping/Screens/Privewscreen.dart';
 import 'package:shopping/Screens/bill.dart';
 import 'package:shopping/Screens/categoryproduct.dart';
 import 'package:shopping/Screens/details.dart';
@@ -30,6 +31,7 @@ void main() async {
       Billpage.id: (context) => Billpage(),
       CategoryProduct.id: (context) => CategoryProduct(),
       Kaufen.id: (context) => Kaufen(),
+      Priviewscreen.id: (context) => Priviewscreen(),
     },
     initialRoute: Homepage.id,
     // Ensure Homepage.id is defined in Homepage class

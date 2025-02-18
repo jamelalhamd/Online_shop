@@ -235,6 +235,17 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(fontSize: 16),
                           ),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('ich habe ein Konto'),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, LoginPage.id);
+                          },
+                          child: Text('Login'))
+                    ],
+                  ),
                 ],
               ),
             ),

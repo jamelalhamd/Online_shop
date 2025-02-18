@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shopping/ReusableBottomSheet.dart';
+import 'package:shopping/wediget/ReusableBottomSheet.dart';
 import 'package:shopping/Screens/Addproduck.dart';
 import 'package:shopping/Screens/homepage.dart';
 import 'package:shopping/Screens/login.dart';

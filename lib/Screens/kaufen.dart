@@ -67,10 +67,12 @@ class _KaufenState extends State<Kaufen> {
       body: ListView.separated(
         shrinkWrap: true,
         itemCount: favoriteItems.length,
-        separatorBuilder: (context, index) => const Divider(
-          indent: 20,
-          endIndent: 20,
-        ),
+        separatorBuilder: (context, index) {
+          return const Divider(
+            indent: 20,
+            endIndent: 20,
+          );
+        },
         itemBuilder: (context, index) {
           final product = favoriteItems[index];
           return Column(

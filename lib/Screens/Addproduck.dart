@@ -116,6 +116,7 @@ class _AddproduckState extends State<Addproduck> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: const Text('Add produckt'),
         centerTitle: true,
         leading: IconButton(

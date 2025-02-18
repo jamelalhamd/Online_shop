@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shopping/Screens/kaufen.dart';
+import 'package:shopping/constant/constant.dart';
 import 'package:shopping/modal/itemmodal.dart';
 
 class ProductCard extends StatefulWidget {
@@ -13,10 +15,15 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   int _itemCount = 1; // Variable to track the count
 
-  // Increment the count
   void _incrementCount() {
     setState(() {
-      _itemCount++;
+      int index =
+          favoriteItems.indexWhere((element) => element.id == widget.item.id);
+      if (index != -1) {
+        _itemCount++;
+        favoriteItemscounts[index] =
+            _itemCount; // Update the count in the favoriteItemscounts list
+      }
     });
   }
 
@@ -24,7 +31,22 @@ class _ProductCardState extends State<ProductCard> {
   void _decrementCount() {
     if (_itemCount > 1) {
       setState(() {
-        _itemCount--;
+        int index =
+            favoriteItems.indexWhere((element) => element.id == widget.item.id);
+        if (index != -1) {
+          _itemCount--;
+          favoriteItemscounts[index] = _itemCount;
+        }
+      });
+    } else if (_itemCount == 1) {
+      setState(() {
+        int index =
+            favoriteItems.indexWhere((element) => element.id == widget.item.id);
+        if (index != -1) {
+          favoriteItems.removeAt(index);
+          favoriteItemscounts.removeAt(index);
+          Navigator.pushReplacementNamed(context, Kaufen.id);
+        }
       });
     }
   }
