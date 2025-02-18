@@ -1,10 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:shopping/modal/itemmodal.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final Producktmodal item;
 
   const ProductCard({super.key, required this.item});
+
+  @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  int _itemCount = 1; // Variable to track the count
+
+  // Increment the count
+  void _incrementCount() {
+    setState(() {
+      _itemCount++;
+    });
+  }
+
+  // Decrement the count
+  void _decrementCount() {
+    if (_itemCount > 1) {
+      setState(() {
+        _itemCount--;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +46,7 @@ class ProductCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Image.network(
-                    item.image,
+                    widget.item.image,
                     fit: BoxFit.contain,
                     height: 150,
                     width: 100,
@@ -35,32 +58,54 @@ class ProductCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.id.toString(),
+                          widget.item.id.toString(),
                           style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
                               color: Colors.white),
                         ),
                         Text(
-                          item.title,
+                          widget.item.title,
                           maxLines: 2,
                           style: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          item.description.substring(0, 20),
+                          widget.item.description.substring(0, 20),
                           maxLines: 2,
                           style: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          r"$" + item.price.toString(),
+                          r"$" + widget.item.price.toString(),
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                        // Removed PersistentShoppingCart widget section
-                        // You can add any other widget here if needed
+                        const SizedBox(height: 10),
+                        // Row with buttons for changing item count
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: _decrementCount,
+                              icon: Icon(Icons.remove),
+                              color: Colors.grey,
+                            ),
+                            Text(
+                              '$_itemCount', // Display current count
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: _incrementCount,
+                              icon: Icon(Icons.add),
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   )
