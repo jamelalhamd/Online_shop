@@ -37,3 +37,5 @@ void decreaseItemCount(Producktmodal item) {
     removeFromFavorites(item); // إذا أصبح العدد 0، احذف المنتج
   }
 }
+
+

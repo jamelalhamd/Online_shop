@@ -242,174 +242,194 @@ class _BillpageState extends State<Billpage> {
                       onPressed: () {},
                     ),
                   ),
-                  FilledButton(
-                    onPressed: () {
-                      PdfService.previewPdf(
-                        context: context,
-                        wedigetcontent: pw.Column(
-                          children: [
-                            // Total amount row
-                            pw.Padding(
-                              padding:
-                                  const pw.EdgeInsets.symmetric(vertical: 16.0),
-                              child: pw.Row(
-                                mainAxisAlignment: pw.MainAxisAlignment.center,
-                                children: [
-                                  pw.Text(
-                                    'Gesambertrag  : ',
-                                    style: pw.TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: pw.FontWeight.bold,
-                                    ),
-                                  ),
-                                  pw.Text(
-                                    '${calculattotal().toStringAsFixed(2)} \$',
-                                    style: pw.TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: pw.FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            pw.Divider(height: 2),
-                            // Headers for the list
-                            pw.Padding(
-                              padding:
-                                  const pw.EdgeInsets.symmetric(vertical: 10),
-                              child: pw.Row(
-                                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                                children: [
-                                  pw.Expanded(
-                                    child: pw.Text(
-                                      '#NO.',
-                                      style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                  pw.Expanded(
-                                    child: pw.Text(
-                                      'Title',
-                                      style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                  pw.Expanded(
-                                    child: pw.Text(
-                                      'Anzahl',
-                                      style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                  pw.Expanded(
-                                    child: pw.Text(
-                                      'Price',
-                                      style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                  pw.Text(
-                                    'Bertrag',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+               Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                    
+                 child: RusableButtom(
+             width: 120,
 
-                            // ListView for items
-                            pw.ListView.separated(
-                              itemCount: favoriteItems.length,
-                              separatorBuilder: (context, index) => pw.Divider(
-                                thickness: 1,
-                                indent: 20,
-                                endIndent: 20,
+                      onPressed: () {
+                        PdfService.previewPdf(
+                          context: context,
+                          wedigetcontent: pw.Column(
+                            children: [
+                                pw.Row(
+                                       children: [
+                 
+                                         pw.Text(
+                                      'Email : '+currectemployee.email,
+                                      style: pw.TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: pw.FontWeight.bold,
+                                      ),
+                                    ),
+                 
+                 
+                                       ]
+                                        ),
+                              pw.Padding(
+                                padding:
+                                    const pw.EdgeInsets.symmetric(vertical: 16.0),
+                                child: pw.Row(
+                                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                                  children: [
+                                    pw.Text(
+                                      'Gesambertrag  : ',
+                                      style: pw.TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: pw.FontWeight.bold,
+                                      ),
+                                    ),
+                                    pw.Text(
+                                      '${calculattotal().toStringAsFixed(2)} \$',
+                                      style: pw.TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: pw.FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              itemBuilder: (context, int index) {
-                                final item = favoriteItems[index];
-
-                                // Add the item data inside the Container
-                                return pw.Padding(
-                                  padding: const pw.EdgeInsets.symmetric(
-                                      vertical: 8.0),
-                                  child: pw.Container(
-                                    padding: const pw.EdgeInsets.all(12.0),
-                                    decoration: pw.BoxDecoration(
-                                      borderRadius: pw.BorderRadius.circular(8),
-                                      boxShadow: [
-                                        pw.BoxShadow(
-                                          blurRadius: 6,
-                                          spreadRadius: 1,
+                              pw.Divider(height: 2),
+                              // Headers for the list
+                              pw.Padding(
+                                padding:
+                                    const pw.EdgeInsets.symmetric(vertical: 10),
+                                child: pw.Row(
+                                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                  children: [
+                                    pw.Expanded(
+                                      child: pw.Text(
+                                        '#NO.',
+                                        style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold,
+                                          fontSize: 18,
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                    child: pw.Row(
-                                      children: [
-                                        pw.Expanded(
-                                          child: pw.Text(
-                                            '${index + 1}',
-                                            style: pw.TextStyle(
-                                              fontWeight: pw.FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                          ),
+                                    pw.Expanded(
+                                      child: pw.Text(
+                                        'Title',
+                                        style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold,
+                                          fontSize: 18,
                                         ),
-                                        pw.Expanded(
-                                          child: pw.Text(
-                                            item.title,
-                                            style: pw.TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                        pw.Expanded(
-                                          child: pw.Text(
-                                            '${favoriteItemscounts[index]}',
-                                            style: pw.TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                        pw.Expanded(
-                                          child: pw.Text(
-                                            '\$${item.price}',
-                                            style: pw.TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                        pw.Text(
-                                          '\$${(item.price * favoriteItemscounts[index]).toStringAsFixed(2)}',
-                                          style: pw.TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-
-                            pw.Divider(height: 2),
-                          ],
-                        ),
-                        previewScreenId: Priviewscreen
-                            .id, // Optional: navigate to this screen after PDF is generated
-                      );
-                    },
-                    child: const Text('Print'),
-                  )
+                                    pw.Expanded(
+                                      child: pw.Text(
+                                        'Anzahl',
+                                        style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                    pw.Expanded(
+                                      child: pw.Text(
+                                        'Price',
+                                        style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                    pw.Text(
+                                      'Bertrag',
+                                      style: pw.TextStyle(
+                                        fontWeight: pw.FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                 
+                              // ListView for items
+                              pw.ListView.separated(
+                                itemCount: favoriteItems.length,
+                                separatorBuilder: (context, index) => pw.Divider(
+                                  thickness: 1,
+                                  indent: 20,
+                                  endIndent: 20,
+                                ),
+                                itemBuilder: (context, int index) {
+                                  final item = favoriteItems[index];
+                 
+                                  // Add the item data inside the Container
+                                  return pw.Padding(
+                                    padding: const pw.EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: pw.Container(
+                                      padding: const pw.EdgeInsets.all(12.0),
+                                      decoration: pw.BoxDecoration(
+                                        borderRadius: pw.BorderRadius.circular(8),
+                                        boxShadow: [
+                                          pw.BoxShadow(
+                                            blurRadius: 6,
+                                            spreadRadius: 1,
+                                          ),
+                                        ],
+                                      ),
+                                      child: pw.Row(
+                                        children: [
+                                          pw.Expanded(
+                                            child: pw.Text(
+                                              '${index + 1}',
+                                              style: pw.TextStyle(
+                                                fontWeight: pw.FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          pw.Expanded(
+                                            child: pw.Text(
+                                              item.title,
+                                              style: pw.TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          pw.Expanded(
+                                            child: pw.Text(
+                                              '${favoriteItemscounts[index]}',
+                                              style: pw.TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          pw.Expanded(
+                                            child: pw.Text(
+                                              '\$${item.price}',
+                                              style: pw.TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          pw.Text(
+                                            '\$${(item.price * favoriteItemscounts[index]).toStringAsFixed(2)}',
+                                            style: pw.TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                 
+                              pw.Divider(height: 2),
+                            ],
+                          ),
+                          previewScreenId: Priviewscreen
+                              .id, // Optional: navigate to this screen after PDF is generated
+                        );
+                      },
+                      text: 'Print',
+                     
+                    ),
+               )
                 ],
               ),
             ),

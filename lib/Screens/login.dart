@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping/Screens/homepage.dart';
 import 'package:shopping/Screens/singup.dart';
+import 'package:shopping/constant/constant.dart';
+import 'package:shopping/firbase/getemloyees.dart';
 import 'package:shopping/firbase/sinuploginUser.dart';
+import 'package:shopping/modal/Employeemodal.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -44,14 +48,22 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         if (userCredential != null) {
-          // Authentication successful, navigate to home
+          //================================================================
+
+          CollectionReference employeeCollection =
+              FirebaseFirestore.instance.collection('employee');
+          List<Employee> employeeslist = await getEmployees(employeeCollection);
+
+          print(employeeslist.length);
+
+//================================================================
           if (!mounted) return;
           Navigator.pushNamed(
             context,
             Homepage.id,
             arguments: {'email': _emailController.text},
           );
-
+          email = _emailController.text;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Login Successful!'),

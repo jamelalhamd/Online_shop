@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopping/modal/itemmodal.dart';
 
-Future<Producktmodal> addProduct({
+Future<Producktmodal> addproduct({
   required String title,
   required String price,
   required String description,

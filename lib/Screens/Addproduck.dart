@@ -71,7 +71,7 @@ class _AddproduckState extends State<Addproduck> {
 
       // If price is valid, proceed with the update
       try {
-        final produck = await addProduct(
+        final produck = await addproduct(
           title: _title.text.isNotEmpty ? _title.text : "No Title",
           price: _price.text.isNotEmpty ? _price.text : "0",
           description:
@@ -92,7 +92,7 @@ class _AddproduckState extends State<Addproduck> {
           ),
         );
 
-        print('produck' + produck.toString());
+        print('produck$produck');
 
         Navigator.pushNamed(context, Homepage.id);
       } on Exception catch (e) {
